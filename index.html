@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BAE — Digital Love Exchange</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+  <!-- Boot -->
+  <div id="boot" class="boot">
+    <div class="bootCard">
+      <div class="bootLogo">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <div class="bootTitle">BAE EXCHANGE</div>
+      </div>
+      <div class="bootLine" id="bootLine">Connecting to Heart Network…</div>
+      <div class="bootProgress">
+        <div class="bootBar" id="bootBar"></div>
+      </div>
+      <div class="bootHint">Secure • Private • Local-only</div>
+    </div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti" class="confetti hidden"></canvas>
+
+  <!-- App -->
+  <div id="app" class="app hidden">
+    <header class="topbar">
+      <div class="brand">
+        <div class="badge">BAE</div>
+        <div class="brandText">
+          <div class="brandTitle">BAE Exchange</div>
+          <div class="brandSub" id="brandSub">Valentine One-Time Gift • Live</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="navBtn active" data-route="markets">Markets</button>
+        <button class="navBtn" data-route="portfolio">Portfolio</button>
+        <button class="navBtn" data-route="history">History</button>
+        <button class="navBtn" data-route="settings">Settings</button>
+      </nav>
+
+      <div class="topRight">
+        <div class="ldr" id="ldrStatus">LDR Mode • 138 km • Connected</div>
+
+        <div class="status">
+          <span class="pulse"></span>
+          <span>LIVE</span>
+        </div>
+
+        <div class="userChip" id="userChip">—</div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <div class="sideSection">
+          <div class="sideTitle">Watchlist</div>
+          <div class="watchlist" id="watchlist"></div>
+        </div>
+
+        <div class="sideSection">
+          <div class="sideTitle">Valentine Controls</div>
+          <div class="sideBtns">
+            <button id="certificateBtn" class="btnGhost">📜 Open Certificate</button>
+            <button id="gameBtn" class="btnGhost">🎮 Catch the Hearts</button>
+            <button id="panicBtn" class="btnDanger">🚨 Need You Now</button>
+          </div>
+          <div class="tiny">
+            “Need You Now” opens WhatsApp with a ready message. One tap send.
+          </div>
+        </div>
+
+        <div class="sideSection">
+          <div class="sideTitle">Mood Mode</div>
+          <div class="moodGrid">
+            <button id="moodMiss" class="btnPrimary">🥺 I miss you</button>
+            <button id="moodStress" class="btnPrimary">😵 I’m stressed</button>
+            <button id="moodHappy" class="btnPrimary">😊 I’m happy</button>
+          </div>
+          <div class="tiny">Each mood triggers a response + WhatsApp message prefilled.</div>
+        </div>
+
+        <div class="sideSection" id="secretSection" style="display:none;">
+          <div class="sideTitle">Secret</div>
+          <button id="secretBtn" class="btnPrimary">🔒 Open Hidden Gift</button>
+          <div class="tiny">Unlocked after you send one Valentine action.</div>
+        </div>
+
+        <div class="sideSection">
+          <div class="sideTitle">LDR Rules (Non-Negotiable)</div>
+          <ul class="rules">
+            <li>Respect is the stop-loss.</li>
+            <li>Consistency beats intensity.</li>
+            <li>Never “short” her feelings.</li>
+            <li>Distance is temporary. Intention is permanent.</li>
+          </ul>
+        </div>
+
+        <button id="auditBtn" class="btnGhost">View Audit Report</button>
+      </aside>
+
+      <section class="content">
+
+        <!-- MARKETS -->
+        <div id="view-markets" class="view">
+          <div class="gridTop">
+            <div class="pairCard">
+              <div class="pairMeta">
+                <div class="pairTitle" id="pairTitle">HUG/USDT</div>
+                <div class="pairSub" id="pairSub">Support level: <span class="hl" id="supportLevel">Shona</span></div>
+              </div>
+              <div class="pairPrice">
+                <div class="price" id="pairPrice">—</div>
+                <div class="delta" id="pairDelta">—</div>
+              </div>
+            </div>
+
+            <div class="metrics">
+              <div class="metric">
+                <div class="mLabel">Hug Index</div>
+                <div class="mValue" id="mHug">—</div>
+                <div class="mNote">Trend</div>
+              </div>
+              <div class="metric">
+                <div class="mLabel">Kiss Liquidity</div>
+                <div class="mValue" id="mKiss">—</div>
+                <div class="mNote">Volume</div>
+              </div>
+              <div class="metric">
+                <div class="mLabel">Laugh Volatility</div>
+                <div class="mValue" id="mLaugh">—</div>
+                <div class="mNote">ATR vibes</div>
+              </div>
+              <div class="metric">
+                <div class="mLabel">Attention Ratio</div>
+                <div class="mValue" id="mAttention">—</div>
+                <div class="mNote">Dominance</div>
+              </div>
+              <div class="metric">
+                <div class="mLabel">Emotional Strength RSI</div>
+                <div class="mValue" id="mRsi">—</div>
+                <div class="mNote">0–100</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gridMid">
+            <div class="panel chartPanel">
+              <div class="panelHeader">
+                <div class="panelTitle">Price Chart</div>
+                <div class="panelRight">
+                  <span class="tag" id="tfTag">1m</span>
+                  <span class="tag">Local Simulation</span>
+                </div>
+              </div>
+
+              <div class="chartWrap">
+                <canvas id="chart"></canvas>
+              </div>
+
+              <div class="chartFooter" id="chartFooter">
+                “Even 138 km can’t change the trend: choosing you.”
+              </div>
+            </div>
+
+            <div class="panel orderPanel">
+              <div class="panelHeader">
+                <div class="panelTitle">Valentine Actions (One-Time)</div>
+                <div class="panelRight">
+                  <span class="tag">WhatsApp Ready</span>
+                  <span class="tag">Tap → Send</span>
+                </div>
+              </div>
+
+              <div class="quickActions">
+                <button id="btnHug" class="btnPrimary">🤗 Give Hug</button>
+                <button id="btnKiss" class="btnPrimary">💋 Give Kiss</button>
+                <button id="btnLove" class="btnPrimary">❤️ Tell “I love you”</button>
+              </div>
+
+              <div class="orderHint">
+                This opens WhatsApp with a pre-filled message. You tap <b>Send</b> once. Later you’ll see it sent by you.
+              </div>
+
+              <div class="miniCallout" id="miniCallout">
+                Pro tip: After one send, a hidden gift unlocks in the sidebar. 🔒
+              </div>
+            </div>
+          </div>
+
+          <div class="gridBottom">
+            <div class="panel">
+              <div class="panelHeader">
+                <div class="panelTitle">Trade History (Memories)</div>
+                <div class="panelRight">
+                  <span class="tag">LDR Ledger</span>
+                  <span class="tag">Heart-backed</span>
+                </div>
+              </div>
+
+              <div class="tableWrap">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Side</th>
+                      <th>Pair</th>
+                      <th>Price</th>
+                      <th>Memory</th>
+                    </tr>
+                  </thead>
+                  <tbody id="historyTbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PORTFOLIO -->
+        <div id="view-portfolio" class="view hidden">
+          <div class="heroCard">
+            <div class="heroTop">
+              <div>
+                <div class="heroTitle">Portfolio</div>
+                <div class="heroSub">Holdings • Risk • Strategy</div>
+              </div>
+              <div class="heroTag">Verified</div>
+            </div>
+
+            <div class="portfolioMain">
+              <div class="holding">
+                <div class="holdingSymbol" id="holdingSymbol">SHONA/FOREVER</div>
+                <div class="holdingDesc">Single-asset portfolio. No hedging. No exit.</div>
+              </div>
+
+              <div class="portfolioStats">
+                <div class="pStat">
+                  <div class="pLabel">Unrealized PnL</div>
+                  <div class="pValue green">∞</div>
+                </div>
+                <div class="pStat">
+                  <div class="pLabel">Drawdown</div>
+                  <div class="pValue">Low (protected)</div>
+                </div>
+                <div class="pStat">
+                  <div class="pLabel">Plan</div>
+                  <div class="pValue">Compounding daily</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="killerLine">
+              <div class="killerBig" id="killerBigLine">Shona, you are my only long-term investment.</div>
+              <div class="killerSmall" id="killerSmallLine">Even when I can’t hold your hand, I hold my choice.</div>
+            </div>
+
+            <div class="finePrint" id="finePrintLine">
+              “Support level: you. Resistance: my ego. Trend: choosing you daily.”
+            </div>
+          </div>
+        </div>
+
+        <!-- HISTORY -->
+        <div id="view-history" class="view hidden">
+          <div class="panel">
+            <div class="panelHeader">
+              <div class="panelTitle">Full Memory Ledger</div>
+              <div class="panelRight">
+                <span class="tag">Transparent</span>
+                <span class="tag">Accountable</span>
+              </div>
+            </div>
+
+            <div class="ledgerGrid">
+              <div class="ledgerCard">
+                <div class="ledgerTitle">Rules I Trade By</div>
+                <ul class="ledgerList">
+                  <li>No silent treatment trades.</li>
+                  <li>I communicate before I assume.</li>
+                  <li>I protect your peace like capital.</li>
+                  <li>I apologize fast and fix faster.</li>
+                </ul>
+              </div>
+
+              <div class="ledgerCard">
+                <div class="ledgerTitle">Signals I Watch</div>
+                <ul class="ledgerList">
+                  <li>When you’re tired → I slow down.</li>
+                  <li>When you’re quiet → I ask gently.</li>
+                  <li>When you’re happy → I celebrate loudly.</li>
+                  <li>When you’re stressed → I become calm.</li>
+                </ul>
+              </div>
+
+              <div class="ledgerCard">
+                <div class="ledgerTitle">Valentine Close Report</div>
+                <div class="ledgerText">
+                  Love: held strong ✅<br/>
+                  Respect: protected ✅<br/>
+                  Distance: irrelevant ✅<br/>
+                  Next hug: pending execution 🥲
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div id="view-settings" class="view hidden">
+          <div class="panel">
+            <div class="panelHeader">
+              <div class="panelTitle">Settings</div>
+              <div class="panelRight">
+                <span class="tag">Local-only</span>
+              </div>
+            </div>
+
+            <div class="settingsGrid">
+              <div class="settingsCard">
+                <div class="settingsTitle">Her Name</div>
+                <div class="settingsRow">
+                  <input id="settingsName" type="text" maxlength="24" />
+                  <button id="saveNameBtn" class="btnPrimary">Save</button>
+                </div>
+                <div class="tiny">Updates your dashboard labels instantly.</div>
+              </div>
+
+              <div class="settingsCard">
+                <div class="settingsTitle">Reset</div>
+                <div class="tiny">Clears local data and returns to first-run.</div>
+                <button id="resetBtn" class="btnDanger">Reset Session</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <!-- Portfolio Unlock Modal -->
+  <div id="unlockModal" class="modal hidden">
+    <div class="modalBackdrop"></div>
+    <div class="modalCard modalWide">
+      <div class="modalHeader">
+        <div class="modalTitle">Portfolio Unlock</div>
+        <div class="modalSub">One-time verification for the most valuable asset on this exchange.</div>
+      </div>
+
+      <div class="unlockGrid">
+        <div class="unlockLeft">
+          <div class="unlockBig" id="unlockBig">Unlocking…</div>
+          <div class="unlockSub" id="unlockSub">Initializing secure connection.</div>
+
+          <div class="unlockProgress">
+            <div class="unlockBar" id="unlockBar"></div>
+          </div>
+
+          <div class="unlockSteps" id="unlockSteps"></div>
+
+          <div class="unlockTip">Tip: Don’t blink — the best part is right after unlock ✅</div>
+        </div>
+
+        <div class="unlockRight">
+          <div class="unlockBadge" id="unlockBadge">SHONA/FOREVER</div>
+          <div class="unlockNote" id="unlockNote">
+            Distance detected: <b>138 km</b><br/>
+            Status: <b>Connected</b><br/>
+            Risk: <b>Zero games</b><br/>
+            Timeframe: <b>Forever</b>
+          </div>
+        </div>
+      </div>
+
+      <div class="modalActions">
+        <button id="unlockCancelBtn" class="btnGhost">Cancel</button>
+        <button id="unlockSkipBtn" class="btnPrimary">Unlock Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Certificate Modal -->
+  <div id="certModal" class="modal hidden">
+    <div class="modalBackdrop"></div>
+    <div class="modalCard modalWide">
+      <div class="modalHeader">
+        <div class="modalTitle">Certificate</div>
+        <div class="modalSub">Designed to be screenshot-worthy. (Take a screenshot to keep it.)</div>
+      </div>
+
+      <div class="certCard" id="certCard">
+        <div class="certTop">
+          <div class="certBrand">BAE EXCHANGE</div>
+          <div class="certBadge">CERTIFICATE OF OWNERSHIP</div>
+        </div>
+
+        <div class="certBody">
+          <div class="certRow">
+            <div class="certLabel">Asset</div>
+            <div class="certValue" id="certAsset">SHONA/FOREVER</div>
+          </div>
+          <div class="certRow">
+            <div class="certLabel">Issued</div>
+            <div class="certValue" id="certIssued">Feb 14, 2026</div>
+          </div>
+          <div class="certRow">
+            <div class="certLabel">Distance</div>
+            <div class="certValue" id="certDistance">138 km</div>
+          </div>
+          <div class="certRow">
+            <div class="certLabel">Status</div>
+            <div class="certValue">Connected ✅</div>
+          </div>
+
+          <div class="certQuote" id="certQuote">
+            “You are my only long-term investment.”
+          </div>
+
+          <div class="certSig">
+            <div class="sigLine"></div>
+            <div class="sigText" id="certSig">CEO</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modalActions">
+        <button id="certCloseBtn" class="btnGhost">Close</button>
+        <button id="certFullscreenBtn" class="btnPrimary">Full-Screen (Screenshot)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Secret Modal -->
+  <div id="secretModal" class="modal hidden">
+    <div class="modalBackdrop"></div>
+    <div class="modalCard modalWide">
+      <div class="modalHeader">
+        <div class="modalTitle">Hidden Gift Unlocked 🔓</div>
+        <div class="modalSub">This is the part you only see after you *send* one Valentine action.</div>
+      </div>
+
+      <div class="secretBox">
+        <div class="secretBig" id="secretBig">You just proved it.</div>
+        <div class="secretMid" id="secretMid">
+          You are my home — even from 138 km away.
+        </div>
+        <div class="secretSmall" id="secretSmall">
+          Not a temporary feeling. Not a seasonal thing. A decision — daily.
+        </div>
+      </div>
+
+      <div class="modalActions">
+        <button id="secretCloseBtn" class="btnGhost">Close</button>
+        <button id="secretConfettiBtn" class="btnPrimary">Celebrate 🎉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mini Game Modal -->
+  <div id="gameModal" class="modal hidden">
+    <div class="modalBackdrop"></div>
+    <div class="modalCard modalWide">
+      <div class="modalHeader">
+        <div class="modalTitle">Catch the Hearts</div>
+        <div class="modalSub">Move your mouse (or finger) to catch hearts for 10 seconds.</div>
+      </div>
+
+      <div class="gameWrap">
+        <canvas id="gameCanvas" width="900" height="380"></canvas>
+        <div class="gameHud">
+          <div class="hudItem">Time: <span id="gameTime">10</span>s</div>
+          <div class="hudItem">Score: <span id="gameScore">0</span></div>
+          <div class="hudItem">Target: 14 ❤️</div>
+        </div>
+      </div>
+
+      <div class="gameResult hidden" id="gameResult">
+        <div class="gameBig" id="gameBig">Happy Valentine’s Day ❤️</div>
+        <div class="gameSmall" id="gameSmall">Score captured. Your love is the best signal.</div>
+      </div>
+
+      <div class="modalActions">
+        <button id="gameCloseBtn" class="btnGhost">Close</button>
+        <button id="gameStartBtn" class="btnPrimary">Start Game</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audit Modal -->
+  <div id="auditModal" class="modal hidden">
+    <div class="modalBackdrop"></div>
+    <div class="modalCard modalWide">
+      <div class="modalHeader">
+        <div class="modalTitle">Heart Audit Report</div>
+        <div class="modalSub">Independent verification of the best asset on this exchange.</div>
+      </div>
+
+      <div class="auditGrid">
+        <div class="auditItem">
+          <div class="auditLabel">Kindness</div>
+          <div class="auditValue">Blue-chip</div>
+          <div class="auditNote">Stable across all market conditions.</div>
+        </div>
+        <div class="auditItem">
+          <div class="auditLabel">Smile</div>
+          <div class="auditValue">High liquidity</div>
+          <div class="auditNote">Instant mood execution.</div>
+        </div>
+        <div class="auditItem">
+          <div class="auditLabel">Presence</div>
+          <div class="auditValue">Low drawdown</div>
+          <div class="auditNote">Makes everything feel safer.</div>
+        </div>
+        <div class="auditItem">
+          <div class="auditLabel">Love</div>
+          <div class="auditValue">Unreplaceable</div>
+          <div class="auditNote">No synthetic substitute exists.</div>
+        </div>
+      </div>
+
+      <div class="auditFinal">
+        <div class="auditBig">Passed ✅</div>
+        <div class="auditLine">“If this was a market, I’d still pick you — every single time.”</div>
+        <div class="auditLine" style="margin-top:6px">“Even 138 km can’t change the trend: choosing you.”</div>
+      </div>
+
+      <div class="modalActions">
+        <button id="playVoiceBtn" class="btnGhost">▶ Play Voice Note</button>
+        <button id="closeAuditBtn" class="btnPrimary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
